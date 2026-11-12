@@ -1,6 +1,6 @@
 services:
-  - type: worker
+  - type: web
     name: cloud-forensics-detective
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python src/reporting/report_generator.py"
+    startCommand: "python src/reporting/report_generator.py && python -m http.server $PORT"
