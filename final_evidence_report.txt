@@ -1,0 +1,19 @@
+Report Generator is online!
+
+====================================
+      OFFICIAL FORENSIC REPORT      
+====================================
+
+TIMELINE OF EVENTS:
+  1. 02:50AM - User: badguy99 - Action: Failed Login
+  2. 03:00AM - User: badguy99 - Action: User Login
+  3. 03:05AM - User: badguy99 - Action: File Download
+
+EXPERT SYSTEM (XAI) ANALYSIS:
+  XAI ALERT: badguy99 is flagged.
+  Reason: The system prioritized this event because the user had a 'Failed Login', but shortly after successfully logged in and performed a 'File Download'. This pattern suggests a password guessing attack followed by data theft.
+
+====================================
+ STATUS: READY FOR AUTOPSY REVIEW   
+====================================
+

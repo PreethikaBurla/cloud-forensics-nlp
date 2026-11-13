@@ -20,7 +20,7 @@ def generate_final_report(timeline, explanation):
     return report
 
 if __name__ == "__main__":
-    print("📄 Report Generator is online!\n")
+    print("Report Generator is online!\n")
     
     # We grab the timeline from Step 3
     ordered_timeline = [
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     # We grab the explanation from Step 4
     xai_explanations = [
-        "⚠️ XAI ALERT: badguy99 is flagged.\n  Reason: The system prioritized this event because the user had a 'Failed Login', but shortly after successfully logged in and performed a 'File Download'. This pattern suggests a password guessing attack followed by data theft."
+        "XAI ALERT: badguy99 is flagged.\n  Reason: The system prioritized this event because the user had a 'Failed Login', but shortly after successfully logged in and performed a 'File Download'. This pattern suggests a password guessing attack followed by data theft."
     ]
     
     # The robot types up the final document
