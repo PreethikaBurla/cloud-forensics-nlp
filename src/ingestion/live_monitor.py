@@ -1,6 +1,7 @@
 import time
 import os
-from watchdog.observers import Observer
+# Swap standard Observer for the cloud-friendly PollingObserver
+from watchdog.observers.polling import PollingObserver as Observer
 from watchdog.events import FileSystemEventHandler
 
 from src.nlp.log_parser import extract_entities
@@ -8,18 +9,17 @@ from src.xai.model_engine import analyze_events
 
 WATCH_DIRECTORY = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw_logs"))
 
-# Add a global cooldown timer
 last_triggered = 0
 
 class LogFileHandler(FileSystemEventHandler):
-    def on_modified(self, event):
+    # Use on_any_event to ensure we catch drops on cloud network drives
+    def on_any_event(self, event):
         global last_triggered
         current_time = time.time()
         
-        # Only trigger if it's a file and at least 2 seconds have passed since the last trigger
-        if not event.is_directory and (current_time - last_triggered) > 2.0:
+        if not event.is_directory and event.event_type in ('created', 'modified') and (current_time - last_triggered) > 2.0:
             last_triggered = current_time
-            print(f"\n🚨 EVIDENCE SAVED: {os.path.basename(event.src_path)}")
+            print(f"\n🚨 CLOUD EVIDENCE DETECTED: {os.path.basename(event.src_path)}")
             time.sleep(1)
             parsed_data = extract_entities(event.src_path)
             if parsed_data:
@@ -32,7 +32,7 @@ def start_listening():
     observer.schedule(event_handler, WATCH_DIRECTORY, recursive=False)
     observer.start()
     
-    print(f"👀 Live Monitor active! Listening for incoming logs at:\n{WATCH_DIRECTORY}")
+    print(f"👀 Live Cloud Monitor active! Listening for incoming logs at:\n{WATCH_DIRECTORY}")
     
     try:
         while True:
