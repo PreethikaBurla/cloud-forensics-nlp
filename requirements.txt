@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pandas
+scikit-learn
+spacy
+lime
+shap
+passlib[bcrypt]
+python-jose[cryptography]
+pytest

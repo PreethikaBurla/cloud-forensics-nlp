@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud Forensics XAI Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .explanation-text { font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">🛡️ Case {{ case.case_number }}: {{ case.title }}</h2>
+        
+        <!-- Risk Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-danger shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">High Risk Events</h5>
+                        <h2 class="display-5">{{ high_count }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-dark bg-warning shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Medium Risk Events</h5>
+                        <h2 class="display-5">{{ medium_count }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Low Risk Events</h5>
+                        <h2 class="display-5">{{ low_count }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reconstructed Timeline -->
+        <h4 class="mb-3">Event Timeline & XAI Explanations</h4>
+        <div class="table-responsive shadow-sm">
+            <table class="table table-bordered table-hover bg-white mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Time (UTC)</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Risk</th>
+                        <th>Explainable AI Reason (Court-Ready)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in timeline %}
+                    <tr class="{% if item.score.level == 'High' %}table-danger{% elif item.score.level == 'Medium' %}table-warning{% endif %}">
+                        <td class="text-nowrap">{{ item.event.timestamp_utc }}</td>
+                        <td><strong>{{ item.event.user }}</strong><br><small class="text-muted">{{ item.event.ip }}</small></td>
+                        <td>{{ item.event.action }}<br><small class="text-muted">{{ item.event.resource }}</small></td>
+                        <td class="fw-bold {% if item.score.level == 'High' %}text-danger{% elif item.score.level == 'Medium' %}text-warning{% else %}text-success{% endif %}">
+                            {{ item.score.level }}
+                        </td>
+                        <td class="explanation-text">{{ item.explanation.plain_text if item.explanation else 'Pending analysis...' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
